@@ -5,14 +5,14 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI:https://auth.aredegalli.it/realms/coachly}
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:https://auth.aredegalli.it/realms/coachly-app}
   cloud:
     gateway:
       server:
         webflux:
           routes:
             - id: users-service
-              uri: ${USERS_SERVICE_URI:http://coachly-users-be:8081}
+              uri: ${USERS_SERVICE_URI:http://coachly-users-be:8080}
               predicates:
                 - Path=/api/users/**
               filters:
@@ -21,7 +21,7 @@ spring:
                 - UserContextHeaders
 
             - id: workouts-service
-              uri: ${WORKOUTS_SERVICE_URI:http://coachly-workouts-be:8082}
+              uri: ${WORKOUTS_SERVICE_URI:http://coachly-workouts-be:8080}
               predicates:
                 - Path=/api/workouts/**
               filters:
@@ -30,7 +30,7 @@ spring:
                 - UserContextHeaders
 
             - id: exercises-service
-              uri: ${EXERCISES_SERVICE_URI:http://coachly-exercises-be:8083}
+              uri: ${EXERCISES_SERVICE_URI:http://coachly-exercises-be:8080}
               predicates:
                 - Path=/api/exercises/**
               filters:
