@@ -1,6 +1,8 @@
 package it.aredegalli.coachly.user;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import it.aredegalli.coachly.user.commons.config.CacheConfig;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
@@ -14,7 +16,10 @@ public class UserIdentityClient {
 	private final WebClient usersServiceWebClient;
 	private final Cache<String, String> userIdCache;
 
-	public UserIdentityClient(WebClient usersServiceWebClient, Cache<String, String> userIdCache) {
+	public UserIdentityClient(
+		WebClient usersServiceWebClient,
+		@Qualifier(CacheConfig.USER_ID_CACHE) Cache<String, String> userIdCache
+	) {
 		this.usersServiceWebClient = usersServiceWebClient;
 		this.userIdCache = userIdCache;
 	}

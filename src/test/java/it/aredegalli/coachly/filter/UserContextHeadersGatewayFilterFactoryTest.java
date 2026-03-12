@@ -1,6 +1,7 @@
 package it.aredegalli.coachly.filter;
 
 import it.aredegalli.coachly.user.UserIdentityClient;
+import it.aredegalli.coachly.user.commons.utils.constants.AuditConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpHeaders;
@@ -49,10 +50,10 @@ class UserContextHeadersGatewayFilterFactoryTest {
 			.verifyComplete();
 
 		HttpHeaders headers = forwardedExchange.get().getRequest().getHeaders();
-		assertEquals("internal-user-id", headers.getFirst("X-User-Id"));
-		assertEquals("coachly-user", headers.getFirst("X-Username"));
-		assertEquals("user@example.com", headers.getFirst("X-Email"));
-		assertEquals("athlete", headers.getFirst("X-Realm-Roles"));
+		assertEquals("internal-user-id", headers.getFirst(AuditConstants.USER_ID_HEADER));
+		assertEquals("coachly-user", headers.getFirst(AuditConstants.USERNAME_HEADER));
+		assertEquals("user@example.com", headers.getFirst(AuditConstants.EMAIL_HEADER));
+		assertEquals("athlete", headers.getFirst(AuditConstants.REALM_ROLES_HEADER));
 	}
 
 	@Test

@@ -1,7 +1,7 @@
 package it.aredegalli.coachly.user;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+import it.aredegalli.coachly.user.commons.config.CacheConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,7 +33,7 @@ class UserIdentityClientTest {
 				.body("{\"userId\":\"internal-user-id\"}")
 				.build());
 		};
-		Cache<String, String> cache = Caffeine.newBuilder().build();
+		Cache<String, String> cache = CacheConfig.buildCache(Duration.ofMinutes(5), 10_000);
 		UserIdentityClient client = new UserIdentityClient(
 			WebClient.builder().exchangeFunction(exchangeFunction).build(),
 			cache
@@ -52,7 +53,7 @@ class UserIdentityClientTest {
 	@Test
 	void resolveUserIdMapsMissingIdentityToUnauthorized() {
 		ExchangeFunction exchangeFunction = request -> Mono.just(ClientResponse.create(HttpStatus.NOT_FOUND).build());
-		Cache<String, String> cache = Caffeine.newBuilder().build();
+		Cache<String, String> cache = CacheConfig.buildCache(Duration.ofMinutes(5), 10_000);
 		UserIdentityClient client = new UserIdentityClient(
 			WebClient.builder().exchangeFunction(exchangeFunction).build(),
 			cache

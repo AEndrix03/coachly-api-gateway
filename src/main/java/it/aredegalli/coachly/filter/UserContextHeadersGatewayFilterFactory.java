@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import it.aredegalli.coachly.user.commons.utils.constants.AuditConstants;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -42,13 +43,13 @@ public class UserContextHeadersGatewayFilterFactory
 		var jwt = authentication.getToken();
 		var requestBuilder = exchange.getRequest()
 			.mutate()
-			.header("X-Internal-Gateway", "true")
-			.header("X-User-Id", valueOrEmpty(userId))
-			.header("X-Username", valueOrEmpty(jwt.getClaimAsString("preferred_username")))
-			.header("X-Email", valueOrEmpty(jwt.getClaimAsString("email")))
-			.header("X-Given-Name", valueOrEmpty(jwt.getClaimAsString("given_name")))
-			.header("X-Family-Name", valueOrEmpty(jwt.getClaimAsString("family_name")))
-			.header("X-Realm-Roles", extractRoles(jwt.getClaimAsMap("realm_access")));
+			.header(AuditConstants.INTERNAL_GATEWAY_HEADER, "true")
+			.header(AuditConstants.USER_ID_HEADER, valueOrEmpty(userId))
+			.header(AuditConstants.USERNAME_HEADER, valueOrEmpty(jwt.getClaimAsString("preferred_username")))
+			.header(AuditConstants.EMAIL_HEADER, valueOrEmpty(jwt.getClaimAsString("email")))
+			.header(AuditConstants.GIVEN_NAME_HEADER, valueOrEmpty(jwt.getClaimAsString("given_name")))
+			.header(AuditConstants.FAMILY_NAME_HEADER, valueOrEmpty(jwt.getClaimAsString("family_name")))
+			.header(AuditConstants.REALM_ROLES_HEADER, extractRoles(jwt.getClaimAsMap("realm_access")));
 
 		return exchange.mutate().request(requestBuilder.build()).build();
 	}
