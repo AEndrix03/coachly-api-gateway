@@ -46,3 +46,11 @@ management:
     web:
       exposure:
         include: health,info
+
+coachly:
+  services:
+    users:
+      url: ${USERS_SERVICE_URI:http://coachly-users-be:8080}
+      cache:
+        user-id-ttl: 5m
+        maximum-size: 10000

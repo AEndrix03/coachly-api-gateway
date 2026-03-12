@@ -10,12 +10,17 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
+import it.aredegalli.coachly.user.UserIdentityClient;
+
 @Component
 public class UserContextHeadersGatewayFilterFactory
 	extends AbstractGatewayFilterFactory<UserContextHeadersGatewayFilterFactory.Config> {
 
-	public UserContextHeadersGatewayFilterFactory() {
+	private final UserIdentityClient userIdentityClient;
+
+	public UserContextHeadersGatewayFilterFactory(UserIdentityClient userIdentityClient) {
 		super(Config.class);
+		this.userIdentityClient = userIdentityClient;
 	}
 
 	@Override
@@ -23,17 +28,22 @@ public class UserContextHeadersGatewayFilterFactory
 		return (exchange, chain) -> exchange.getPrincipal()
 			.filter(JwtAuthenticationToken.class::isInstance)
 			.cast(JwtAuthenticationToken.class)
-			.map(authentication -> enrichExchange(exchange, authentication))
-			.defaultIfEmpty(exchange)
-			.flatMap(chain::filter);
+			.flatMap(authentication -> userIdentityClient.resolveUserId(authentication.getToken().getSubject())
+				.map(userId -> enrichExchange(exchange, authentication, userId))
+				.flatMap(chain::filter))
+			.switchIfEmpty(chain.filter(exchange));
 	}
 
-	private ServerWebExchange enrichExchange(ServerWebExchange exchange, JwtAuthenticationToken authentication) {
+	private ServerWebExchange enrichExchange(
+		ServerWebExchange exchange,
+		JwtAuthenticationToken authentication,
+		String userId
+	) {
 		var jwt = authentication.getToken();
 		var requestBuilder = exchange.getRequest()
 			.mutate()
 			.header("X-Internal-Gateway", "true")
-			.header("X-User-Id", valueOrEmpty(jwt.getSubject()))
+			.header("X-User-Id", valueOrEmpty(userId))
 			.header("X-Username", valueOrEmpty(jwt.getClaimAsString("preferred_username")))
 			.header("X-Email", valueOrEmpty(jwt.getClaimAsString("email")))
 			.header("X-Given-Name", valueOrEmpty(jwt.getClaimAsString("given_name")))
