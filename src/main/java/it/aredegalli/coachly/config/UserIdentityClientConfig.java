@@ -9,6 +9,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class UserIdentityClientConfig {
 
 	@Bean
+	WebClient.Builder webClientBuilder() {
+		return WebClient.builder();
+	}
+
+	@Bean
 	WebClient usersServiceWebClient(
 		WebClient.Builder webClientBuilder,
 		@Value("${coachly.services.users.url}") String usersServiceUrl
