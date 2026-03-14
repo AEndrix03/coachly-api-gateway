@@ -1,6 +1,8 @@
 spring:
   application:
     name: coachly-api-gateway
+  codec:
+    log-request-details: true
   security:
     oauth2:
       resourceserver:
@@ -57,6 +59,17 @@ management:
       exposure:
         include: health,info
       base-path: /actuator
+
+logging:
+  level:
+    root: INFO
+    it.aredegalli: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.server: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 coachly:
   services:
