@@ -13,19 +13,19 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>coachly-api-gateway</name>
 	<description>Coachly API Gateway</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+
+	<repositories>
+		<repository>
+			<id>aredegalli</id>
+			<name>aredegalli</name>
+			<url>https://mvn.aredegalli.it</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository>
+	</repositories>
+
 	<properties>
 		<java.version>25</java.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
