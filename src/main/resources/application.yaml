@@ -39,13 +39,24 @@ spring:
                 - UserContextHeaders
 
 server:
-  port: ${SERVER_PORT:8080}
+  address: 0.0.0.0
+  port: ${SERVER_PORT:8443}
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: ${COACHLY_KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
+  compression:
+    enabled: true
+  http2:
+    enabled: true
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
+      base-path: /actuator
 
 coachly:
   services:
@@ -54,3 +65,10 @@ coachly:
       cache:
         user-id-ttl: 5m
         maximum-size: 10000
+  security:
+    cors:
+      allowed-origins: ${COACHLY_CORS_ALLOWED_ORIGINS:*}
+      allowed-methods: ${COACHLY_CORS_ALLOWED_METHODS:*}
+      allowed-headers: ${COACHLY_CORS_ALLOWED_HEADERS:*}
+      allow-credentials: ${COACHLY_CORS_ALLOW_CREDENTIALS:false}
+      max-age: ${COACHLY_CORS_MAX_AGE:3600}
