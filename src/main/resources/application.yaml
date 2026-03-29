@@ -40,6 +40,24 @@ spring:
                 - RemoveRequestHeader=Cookie
                 - UserContextHeaders
 
+            - id: feedback-service
+              uri: ${FEEDBACK_SERVICE_URI:http://coachly-feedback-be:8080}
+              predicates:
+                - Path=/api/feedback/**
+              filters:
+                - StripPrefix=1
+                - RemoveRequestHeader=Cookie
+                - UserContextHeaders
+
+            - id: coach-service
+              uri: ${COACH_SERVICE_URI:http://coachly-coach-be:8080}
+              predicates:
+                - Path=/api/coach/**
+              filters:
+                - StripPrefix=1
+                - RemoveRequestHeader=Cookie
+                - UserContextHeaders
+
 server:
   address: 0.0.0.0
   port: ${SERVER_PORT:8443}
