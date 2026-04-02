@@ -49,6 +49,51 @@ spring:
                 - RemoveRequestHeader=Cookie
                 - UserContextHeaders
 
+            - id: feedback-polls-service
+              uri: ${FEEDBACK_SERVICE_URI:http://coachly-feedback-be:8080}
+              predicates:
+                - Path=/api/polls/**,/api/admin/polls/**
+              filters:
+                - StripPrefix=1
+                - RemoveRequestHeader=Cookie
+                - UserContextHeaders
+
+            - id: feedback-comments-service
+              uri: ${FEEDBACK_SERVICE_URI:http://coachly-feedback-be:8080}
+              predicates:
+                - Path=/api/comments/**
+              filters:
+                - StripPrefix=1
+                - RemoveRequestHeader=Cookie
+                - UserContextHeaders
+
+            - id: feedback-feature-requests-service
+              uri: ${FEEDBACK_SERVICE_URI:http://coachly-feedback-be:8080}
+              predicates:
+                - Path=/api/feature-requests/**,/api/admin/feature-requests/**
+              filters:
+                - StripPrefix=1
+                - RemoveRequestHeader=Cookie
+                - UserContextHeaders
+
+            - id: feedback-admin-reports-service
+              uri: ${FEEDBACK_SERVICE_URI:http://coachly-feedback-be:8080}
+              predicates:
+                - Path=/api/admin/reports/**
+              filters:
+                - StripPrefix=1
+                - RemoveRequestHeader=Cookie
+                - UserContextHeaders
+
+            - id: feedback-admin-analytics-service
+              uri: ${FEEDBACK_SERVICE_URI:http://coachly-feedback-be:8080}
+              predicates:
+                - Path=/api/admin/analytics/**
+              filters:
+                - StripPrefix=1
+                - RemoveRequestHeader=Cookie
+                - UserContextHeaders
+
             - id: coach-service
               uri: ${COACH_SERVICE_URI:http://coachly-coach-be:8080}
               predicates:
