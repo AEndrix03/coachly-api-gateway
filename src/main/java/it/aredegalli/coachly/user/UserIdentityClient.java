@@ -1,6 +1,8 @@
 package it.aredegalli.coachly.user;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 import it.aredegalli.coachly.user.commons.config.CacheConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -67,7 +69,16 @@ public class UserIdentityClient {
 			)
 			.bodyToMono(UserIdentityResolveResponse.class)
 			.map(UserIdentityResolveResponse::userId)
+			.timeout(Duration.ofSeconds(5))
 			.doOnNext(userId -> userIdCache.put(cacheKey, userId))
+			.onErrorMap(
+				TimeoutException.class,
+				ex -> new ResponseStatusException(
+					HttpStatus.SERVICE_UNAVAILABLE,
+					"Timed out while resolving the authenticated user",
+					ex
+				)
+			)
 			.onErrorMap(
 				WebClientRequestException.class,
 				ex -> new ResponseStatusException(
