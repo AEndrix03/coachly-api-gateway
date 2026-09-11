@@ -36,7 +36,7 @@ class AppRequirementsControllerTest {
     @Test
     void requirementsAreServedWithoutAuthentication() {
         client.get()
-            .uri("/public/app/requirements")
+            .uri("/api/app/requirements")
             .exchange()
             .expectStatus().isOk()
             .expectBody()

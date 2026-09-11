@@ -44,6 +44,10 @@ public class SecurityConfig {
 				.pathMatchers("/actuator/health", "/actuator/info").permitAll()
 				.pathMatchers(HttpMethod.OPTIONS).permitAll()
 				.pathMatchers("/public/**").permitAll()
+				// Eccezione deliberata e stretta: un client troppo vecchio per
+				// parlare col backend puo' esserlo anche per autenticarsi, e la
+				// schermata di aggiornamento deve comparire lo stesso.
+				.pathMatchers(HttpMethod.GET, "/api/app/requirements").permitAll()
 				.pathMatchers("/api/**").authenticated()
 				.anyExchange().denyAll())
 			.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(
