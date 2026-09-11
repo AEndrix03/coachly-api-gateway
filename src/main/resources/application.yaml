@@ -40,6 +40,15 @@ spring:
                 - RemoveRequestHeader=Cookie
                 - UserContextHeaders
 
+            - id: catalog-service
+              uri: ${EXERCISES_SERVICE_URI:http://coachly-exercises-be:8080}
+              predicates:
+                - Path=/api/catalog/**
+              filters:
+                - StripPrefix=1
+                - RemoveRequestHeader=Cookie
+                - UserContextHeaders
+
             - id: feedback-service
               uri: ${FEEDBACK_SERVICE_URI:http://coachly-feedback-be:8080}
               predicates:
