@@ -135,6 +135,13 @@ logging:
     console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 coachly:
+  app:
+    # Soglie di versione del client (25-release-and-environments.md del FE).
+    # Si alzano al rilascio, via variabile d'ambiente, senza ricostruire.
+    requirements:
+      min-supported-version: ${COACHLY_APP_MIN_SUPPORTED_VERSION:0.0.0}
+      recommended-version: ${COACHLY_APP_RECOMMENDED_VERSION:0.0.0}
+      message: ${COACHLY_APP_REQUIREMENTS_MESSAGE:}
   services:
     users:
       url: ${USERS_SERVICE_URI:http://coachly-users-be:8080}
